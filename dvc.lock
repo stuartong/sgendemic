@@ -1,0 +1,38 @@
+schema: '2.0'
+stages:
+  get_covid_numbers:
+    cmd: python3.7 get_covid_nos.py data/raw_covid_data.csv
+    deps:
+    - path: get_covid_nos.py
+      md5: d6191fbe2613a566080675bffc7dbd1e
+      size: 596
+    outs:
+    - path: data/raw_covid_data.csv
+      md5: 72124737041864516eb0e89ec13a88ab
+      size: 743604
+  get_sg_numbers:
+    cmd: python3.7 sg_covid_nos.py data/raw_covid_data.csv data/sg_covid_clean.csv
+    deps:
+    - path: data/raw_covid_data.csv
+      md5: 72124737041864516eb0e89ec13a88ab
+      size: 743604
+    - path: sg_covid_nos.py
+      md5: 7c3760ca9cd55ef1d85675d522d1638a
+      size: 859
+    outs:
+    - path: data/sg_covid_clean.csv
+      md5: c4e2169a94b9f7a93b351fc73f3cf749
+      size: 16794
+  get_pop_defaults:
+    cmd: python3.7 get_pop.py data/pop_defaults.csv data/prob_hos_age.csv
+    deps:
+    - path: get_pop.py
+      md5: 9b209ad23872966a1f65f66f068dd126
+      size: 2098
+    outs:
+    - path: data/pop_defaults.csv
+      md5: 4369c9b7fe736a8c5debbddb0e20d09e
+      size: 525
+    - path: data/prob_hos_age.csv
+      md5: 8f1336b774a2d31b3c49556f98255ba9
+      size: 254

@@ -1,0 +1,210 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css"
+   rel = "stylesheet">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+</head>
+<body>
+<style>
+  table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+  }
+  
+  tr:nth-child(even) {
+    background-color: #dddddd;
+  }
+  </style>  
+
+<script type="text/javascript">
+  function get_nextsibling(n)
+ {
+ x=n.nextSibling;
+ while (x.nodeType!=1)
+   {
+   x=x.nextSibling;
+   }
+ return x;
+ }
+function showValue(self)
+{
+ get_nextsibling(self).innerHTML=self.value;
+}
+</script>
+  
+  <form method="POST" action="">
+    <h1>Endemic or Pandemic - Singapore</h1><br>
+    <h2>Assumptions:</h2>
+    <h3>COVID-19 Virality</h3>
+    <h4>R0: <input type="number" step="0.1" min=0 max=10 name="r0" value='5.5'></h4>
+    <p>R0, pronounced “R naught,” is a mathematical term that indicates how contagious an infectious disease is. It’s also referred to as the reproduction number. As an infection is transmitted to new people, it reproduces itself. R0 tells you the average number of people who will contract a contagious disease from one person with that disease.
+    <a href="https://www.healthline.com/health/r-nought-reproduction-number#meaning" target="_blank">(Link)</a> </p>  
+    <p>It isn't a perfect measure but we will use it to get a sense of how many people will get infected assuming no measures to stem the spread (CB/Phase2HA). We use a default R0 of 5.5 based on the average of a <a href="https://www.reddit.com/r/singapore/comments/onvrsr/ho_ching_on_the_current_covid_delta_pandemic/" target="_blank">recent post from Ho Ching that suggests and R0 of 5-6, particularly for the delta variant
+    </a></p>
+    <h4>Serial Interval: <input type="number" step="0.1" min=1 max=10 name="si" value='5.4'></h4>
+    <p>The serial interval, in the epidemiology of communicable (infectious) diseases, refers to the time between successive cases in a chain of transmission.
+      <a href="https://en.wikipedia.org/wiki/Serial_interval" target="_blank">(Link)</a></p>  
+    </p>
+    <p>We use a default serial interval of 5.4 for COVID-19 based on a pooled estiamte from <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7448781/" target="_blank">this study</a></p>
+    <h3>Age Group Assumptions</h3>
+    <table>
+        <tr>
+          <th>Category No</th>
+          <th>Age Group</th>
+          <th>Percentage of Population</th>
+          <th>Vax Rate</th>
+          <th>Prob of Hospitalization (No Vax)</th>
+          <th>Prob of Hospitalization (2 Dose)</th>
+        </tr>
+        <tr>
+          <td>1</td>
+          <td>Below 12</td>
+          <td>14.5%</td>
+          <td><input type="range" min=0 max=100 value={{def_c1_vax}} class="slider" name="cat_1_vax" onchange="showValue(this)" /><span id="range">{{def_c1_vax}}%</span></td>
+          <td>2.35%</td>
+          <td>0.83%</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>12 to 39</td>
+          <td>33.2%</td>
+          <td><input type="range" min=0 max=100 value={{def_c2_vax}}  class="slider" name="cat_2_vax" onchange="showValue(this)" /><span id="range">{{def_c2_vax}}%</span></td>
+          <td>3.95%</td>
+          <td>1.4%</td>
+        </tr>      
+        <tr>
+          <td>3</td>
+          <td>40 to 44</td>
+          <td>7.4%</td>
+          <td><input type="range" min=0 max=100 value={{def_c3_vax}} class="slider" name="cat_3_vax" onchange="showValue(this)" /><span id="range">{{def_c3_vax}}%</span></td>
+          <td>6.95%</td>
+          <td>2.46%</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>45 to 59</td>
+          <td>22.6%</td>
+          <td><input type="range" min=0 max=100 value={{def_c4_vax}} class="slider" name="cat_4_vax" onchange="showValue(this)" /><span id="range">{{def_c4_vax}}%</span></td>
+          <td>9.75%</td>
+          <td>3.46%</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td>60 to 69</td>
+          <td>12.7%</td>
+          <td><input type="range" min=0 max=100 value={{def_c5_vax}} class="slider" name="cat_5_vax" onchange="showValue(this)" /><span id="range">{{def_c5_vax}}%</span></td>
+          <td>12.85%</td>
+          <td>4.55%</td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td>70 and older</td>
+          <td>9.5%</td>
+          <td><input type="range" min=0 max=100 value={{def_c6_vax}} class="slider" name="cat_6_vax" onchange="showValue(this)" /><span id="range">{{def_c6_vax}}%</span></td>
+          <td>15.4%</td>
+          <td>5.46%</td>
+        </tr>
+    </table>
+    Note: Below 12 includes 10-14 year olds and 12 to 39 year olds start from 15 due to nature of the demographics data<br><br>
+
+    <ul id="sliders">
+      <li>Below 12: <span class="value">0</span>%<div class="slider">14.5</div></li>
+      <li>12 to 39: <span class="value">0</span>%<div class="slider">33.2</div></li>
+      <li>40 to 44: <span class="value">0</span>%<div class="slider">7.4</div></li>
+      <li>45 to 59: <span class="value">0</span>%<div class="slider">22.6</div></li>
+      <li>60 to 69: <span class="value">0</span>%<div class="slider">12.7</div></li>
+      <li>70 and older: <span class="value">0</span>%<div class="slider">9.5</div></li>
+  </ul>
+  <script>
+      var sliders = $("#sliders .slider");
+      var availableTotal = 100;
+      sliders.each(function() {
+          var init_value = parseInt($(this).text());
+
+           $(this).siblings('.value').text(init_value);
+
+           $(this).empty().slider({
+                  value: init_value,
+                  min: 0,
+                  max: 50,
+                  range: "max",
+                  step: 0.5,
+                  animate: 0,
+                  slide: function(event, ui) {
+          
+                      // Update display to current value
+                      $(this).siblings('.value').text(ui.value);
+
+                      // Get current total
+                      var total = 0;
+
+                      sliders.not(this).each(function() {
+                          total += $(this).slider("option", "value");
+                      });
+
+                      // Need to do this because apparently jQ UI
+                      // does not update value until this event completes
+                      total += ui.value;
+
+                      var delta = availableTotal - total;
+          
+                      // Update each slider
+                      sliders.not(this).each(function() {
+                          var t = $(this),
+                              value = t.slider("option", "value");
+
+                           var new_value = value + (delta/2);
+                          
+                           if (new_value < 0 || ui.value == 100) 
+                              new_value = 0;
+                           if (new_value > 100) 
+                              new_value = 100;
+
+                          t.siblings('.value').text(new_value);
+                          t.slider('value', new_value);
+          });
+      }
+  });
+});
+
+
+
+   </script>
+    
+
+    <input type="submit" value="Submit">
+    </div>
+  </form>
+
+
+<h2>Output</h2>
+Based on the following assumptions:<br> 
+<ul>
+  <li><b>R0: </b> {{r0}}</li>
+  <li><b>Serial Interval: </b> {{si}}</li>
+  <li><b>Cat 1 Vax Rate: </b> {{cat_1_vax}}%</li>
+  <li><b>Cat 2 Vax Rate: </b> {{cat_2_vax}}%</li>
+  <li><b>Cat 3 Vax Rate: </b> {{cat_3_vax}}%</li>
+  <li><b>Cat 4 Vax Rate: </b> {{cat_4_vax}}%</li>
+  <li><b>Cat 5 Vax Rate: </b> {{cat_5_vax}}%</li>
+  <li><b>Cat 6 Vax Rate: </b> {{cat_6_vax}}%</li>
+</ul>
+
+
+There would have been <b>{{no_cycles}} cycles</b> resulting in <b>{{infected}}</b> infected.
+<br>
+We would reach max ICU capacity of 1000 in <b>{{ days }} days </b> with <b>{{icu}}</b> people requiring hospitalization/ICU.
+
+
+
+</body>
+</html>

@@ -1,0 +1,21 @@
+stages:
+  get_covid_numbers:
+    cmd: python3.7 get_covid_nos.py data/raw_covid_data.csv
+    deps:
+    - get_covid_nos.py
+    outs:
+    - data/raw_covid_data.csv
+  get_sg_numbers:
+    cmd: python3.7 sg_covid_nos.py data/raw_covid_data.csv data/sg_covid_clean.csv
+    deps:
+    - sg_covid_nos.py
+    - data/raw_covid_data.csv
+    outs:
+    - data/sg_covid_clean.csv
+  get_pop_defaults:
+    cmd: python3.7 get_pop.py data/pop_defaults.csv data/prob_hos_age.csv
+    deps:
+    - get_pop.py
+    outs:
+    - data/pop_defaults.csv
+    - data/prob_hos_age.csv
